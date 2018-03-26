@@ -29,20 +29,22 @@ Your features will have more knowledge about their purpose than generic Onshape 
 This video shows the creation of the slot feature. It demonstrates what a FeatureScript workflow can look like, and creates the same "Slot" feature type that the tutorial will guide you through below.
 
 ## Step-by-step guide
-This guide will take you step by step through the actions shown in the video above, explaining what the FeatureScript does and why. Major FeatureScript concepts will be marked in bold when they are explained.
+This guide will take you step by step through the actions shown in the video above, explaining what the FeatureScript does and why. Major FeatureScript concepts will be marked in __bold__ when they are explained.
 
 ### Create a feature definition
+#### 1
 Start by creating a new Feature Studio tab in a new Onshape document:
 
 <!-- Insert Picture Here -->
 
-A Feature Studio is a place for editing FeatureScript where you can define functions to be used as __feature types__. All of Onshape's native feature types, from extrude to helix, are also written as FeatureScript feature types in the Onshape Standard Library. Custom feature types that you write here will be treated like Onshape feature types in the Part Studio.
+A Feature Studio is a place for editing FeatureScript where you can define functions to be used as __feature types__. All of Onshape's native feature types, from extrude to helix, are also written as FeatureScript feature types in the [Onshape Standard Library](https://cad.onshape.com/documents/12312312345abcabcabcdeff). Custom feature types that you write here will be treated like Onshape feature types in the Part Studio.
 
+#### 2
 In the Feature Studio, in the top-left corner, click the "New feature" button.
 
 This will insert the following code, which is the minimum template for defining an empty feature type:
 
-```featurescript
+```javascript
 annotation { "Feature Type Name" : "My Feature" }
 export const myFeature = defineFeature(function(context is Context, id is Id, definition is map)
     precondition
@@ -53,34 +55,27 @@ export const myFeature = defineFeature(function(context is Context, id is Id, de
         // Define the function's action
     });
 ```
-For more information about the structure and pieces of a feature definition, see Writing features.
+For more information about the structure and pieces of a feature definition, see [Writing features](https://cad.onshape.com/FsDoc/feature-types.html).
 
-NOTE
+#### 3
+After pressing the "New feature" button, you should see the text `"My Feature"` highlighted. This field is a [string](https://cad.onshape.com/FsDoc/variables.html#strings) which defines the user-visible name of the feature type. This name is seen when a user inserts the feature, and in default feature names (e.g. "Extrude 1"). The feature type name can include whitespace, and can be changed at any time without affecting Part Studios' behavior or other FeatureScript code.
 
-In the Feature Studio, the code inserted by the "New feature" button has several sections of text marked as autocomplete regions. If you look closely, you can identify these regions by a thin, gray box outline:
-Autocompletion regions
+Change the feature type name to `"Slot"`:
 
-Autocomplete regions are temporary navigation aids designed to help you write features quickly, and generally indicate the regions of inserted text that you are likely to change. You can navigate your cursor through these regions using the following keyboard shortcuts:
-
-tab : Select next autocomplete region
-shift-tab : Select previous autocomplete region
-escape : Dismiss all autocomplete regions
-Moving your cursor outside a region (with the mouse or arrow keys) will also dismiss all autocomplete regions.
-
-After pressing the "New feature" button, you should see the text "My Feature" highlighted. This field is a string which defines the user-visible name of the feature type. This name is seen when a user inserts the feature, and in default feature names (e.g. "Extrude 1"). The feature type name can include whitespace, and can be changed at any time without affecting Part Studios' behavior or other FeatureScript code.
-
-Change the feature type name to "Slot":
-
+```javascript
 annotation { "Feature Type Name" : "Slot" }
-Select the text myFeature on the next line (with autocomplete regions, you can press tab to select the next field). This is the FeatureScript name of this feature function. The function name is used by any FeatureScript calls that create this feature, including features created in the Part Studio. Thus, changing this name after creating features will break all features created with the old name. This name cannot include whitespace or special characters.
+```
+#### 4
+Select the text `myFeature` on the next line (with autocomplete regions, you can press `tab` to select the next field). This is the FeatureScript name of this feature function. The function name is used by any FeatureScript calls that create this feature, *including features created in the Part Studio*. Thus, changing this name after creating features will break all features created with the old name. This name cannot include whitespace or special characters.
 
-Change the FeatureScript function name to "slot":
-
+Change the FeatureScript function name to `"slot"`:
+```javascript
 export const slot = defineFeature(function(context is Context, id is Id, definition is map)
+```
 Your Feature Studio should now look like this (but with a different FeatureScript version and import version):
-
-FeatureScript 347;
-import(path : "onshape/std/geometry.fs", version : "347.0");
+```javascript
+FeatureScript 765;
+import(path : "onshape/std/geometry.fs", version : "765.0");
 
 annotation { "Feature Type Name" : "Slot" }
 export const slot = defineFeature(function(context is Context, id is Id, definition is map)
@@ -91,103 +86,88 @@ export const slot = defineFeature(function(context is Context, id is Id, definit
     {
         // Define the function's action
     });
-Define the feature's input parameters
-Select the next region: "// Define the parameters of the feature type". This section of code, between the two curly braces, is the function's precondition. The precondition is used, in part, to define a feature's input parameters. The text highlighted is a comment, which does not affect FeatureScript evaluation.
+```
+### Define the feature's input parameters
+#### 1
+Select the next region: "`// Define the parameters of the feature type`". This section of code, between the two curly braces, is the function's precondition. The precondition is used, in part, to define a feature's input parameters. The text highlighted is a comment, which does not affect FeatureScript evaluation.
 
 Delete this comment:
-
+```javascript
 // Define the parameters of the feature type
-Our feature's first input parameter will be an edge which defines the slot path. Input parameters to features are stored in its definition: a map whose keys are strings. These parameters can later be accessed from the definition to define how the feature should be built.
+```
+#### 2
+Our feature's first input parameter will be an edge which defines the slot path. Input parameters to features are stored in its `definition`: a map whose keys are strings. These parameters can later be accessed from the `definition` to define how the feature should be built.
 
 All geometry in FeatureScript is passed into features as Queries, so we will define a query parameter.
 
 Start typing "query". The autocompletion menu will expand below your cursor as you type. One of the autocompletions you should be able to see is "Query parameter", a snippet of code which, when placed in a feature precondition, defines a query parameter.
 
-NOTE
-
-Typing in a Feature Studio will often bring up a context-sensitive autocomplete menu. This menu shows a list of one or more autocompletions which match what you're typing:
-Autocomplete menu
-
-The flyout on the right side shows a preview of the text you will autocomplete, along with a short description. Autocomplete will show FeatureScript functions (including features), types, enums, and snippets (i.e. short FeatureScript code templates).
-
-When an autocompletion menu is open, you can use the following shortcuts to navigate the menu:
-
-up/down arrow keys : Select next/previous item in menu
-enter : Insert selected autocompletion
-escape : Remove the autocompletion menu
 Use the arrow keys (if necessary) to select the "Query parameter" snippet, and press enter to insert the autocompletion. This will insert the following code:
-
+```javascript
 annotation { "Name" : "My Query", "Filter" : EntityType.FACE, "MaxNumberOfPicks" : 1 }
-definition.parameter is Query;
-NOTE
+definition.nyQuery is Query;
+```
 
-The code above represents a feature parameter, which the user will pass into the feature, and FeatureScript code will use. The parameter is defined on the second line, which asserts that the field "parameter" on the definition is a Query for geometry.
-The first line is an annotation, associated with the line that defines the parameter. The information in this annotation indicates how Onshape should create an entry for this parameter in the feature dialog.
+After inserting the Query parameter autocompletion, you should see the text `"My Query"` highlighted. This is the user-visible name of the parameter. Query parameter names are visible in the feature dialog when the field is empty.
 
-After inserting the Query parameter autocompletion, you should see the text "My Query" highlighted. This is the user-visible name of the parameter. Query parameter names are visible in the feature dialog when the field is empty.
+Change the user-visible parameter name to `"Slot path"`:
 
-Change the user-visible parameter name to "Slot path":
-
+```javascript
 annotation { "Name" : "Slot path", "Filter" : EntityType.FACE, "MaxNumberOfPicks" : 1 }
 definition.parameter is Query;
-Select the next region: "EntityType.FACE". This field represents a filter that controls which geometric entities can be accepted by the parameter. You can filter by EntityType, GeometryType, BodyType, and more.
+```
+Select the next region: "`EntityType.FACE`". This field represents a filter that controls which geometric entities can be accepted by the parameter. You can filter by EntityType, GeometryType, BodyType, and more.
 
-To allow only edges, change the filter to "EntityType.EDGE":
+To allow only edges, change the filter to "`EntityType.EDGE`":
 
+```javascript
 annotation { "Name" : "Slot path", "Filter" : EntityType.EDGE, "MaxNumberOfPicks" : 1 }
-definition.parameter is Query;
-Select the next region: "1". This field represents the maximum number of selections the user can make in this field. This field can also be removed to allow infinite selections.
+definition.myQuery is Query;
+```
+Select the next region: "`1`". This field represents the maximum number of selections the user can make in this field. This field can also be removed to allow infinite selections.
 
-To allow just one edge selection, leave the default of 1:
+To allow just one edge selection, leave the default of `1`:
 
+```javascript
 annotation { "Name" : "Slot path", "Filter" : EntityType.EDGE, "MaxNumberOfPicks" : 1 }
-definition.parameter is Query;
-Select the next region: "parameter". This is the FeatureScript-visible name of this parameter, which will later be used to access this parameter within the function's body. The value of this parameter is stored as a Query on a map named "definition".
+definition.myQuery is Query;
+```
+Select the next region: "`myQuery`". This is the FeatureScript-visible name of this parameter, which will later be used to access this parameter within the function's body. The value of this parameter is stored as a Query on a map named "`definition`".
 
-Change the FeatureScript parameter name to "slotPath":
-
+Change the FeatureScript parameter name to "`slotPath`":
+```javascript
 annotation { "Name" : "Slot path", "Filter" : EntityType.FACE, "MaxNumberOfPicks" : 1 }
 definition.slotPath is Query;
+```
+#### 3
 The second parameter will define the part to cut. Since this parameter will also take in model geometry, we will use another query parameter.
 
 On the line after the slot path parameter, start typing "query", and select the autocompletion for "Query parameter":
-
+```javascript
 annotation { "Name" : "My Query", "Filter" : EntityType.FACE, "MaxNumberOfPicks" : 1 }
-definition.parameter is Query;
+definition.myQuery is Query;
+```
 Fill out its fields with the following:
-
+```javascript
 annotation { "Name" : "Part to cut", "Filter" : EntityType.BODY && BodyType.SOLID, "MaxNumberOfPicks" : 1 }
 definition.partToCut is Query;
-NOTE
+```
 
-The filter above specifies that a user can select any full part in the Part Studio to use for this parameter.
-Any selectable piece of topology in Onshape (edges, vertices, parts, etc.) is known as an entity. Every entity has an EntityType and a BodyType which specify what kind of geometry it represents.
-
-The EntityType BODY specifies a full, independent object in the Part Studio. A BODY is often a part, but it can also be things of lower dimension. The dimension of a body is distinguished by its BodyType:
-
-BodyType.SOLID, as in the filter above, specifies an independent three-dimensional part (such as the result of extruding a sketch region)
-BodyType.SHEET specifies an independent two-dimensional surface (such as the default planes, or the result of extruding a sketch edge)
-BodyType.WIRE specifies an independent one-dimensional path (such as the result of a helix feature)
-BodyType.POINT specifies a independent zero-dimensional point (such as the origin, or the result of opPoint)
-Entities which are not EntityType.BODY, like a single face of a part, are always children of some other entity. The other EntityTypes specify child entities of a certain dimension:
-
-EntityType.FACE specifies a two-dimensional child
-EntityType.EDGE specifies a one-dimensional child
-EntityType.VERTEX specifies a zero-dimensional child
-A child entity will have a BodyType which matches dimension of its owner body.
-
+#### 4
 The final feature parameter will define the width of the slot. Since this parameter is a one-dimensional distance, we will use a length parameter.
 
 On the line after the slot path parameter, start typing "length", and select the autocompletion for "Length parameter":
-
+```javascript
 annotation { "Name" : "My Length" }
-isLength(definition.parameter, LENGTH_BOUNDS);
+isLength(definition.myLength, LENGTH_BOUNDS);
+```
 Fill out its fields to name the parameter:
-
+```javascript
 annotation { "Name" : "Width" }
 isLength(definition.width, LENGTH_BOUNDS);
+```
 Add blank lines between the parameters for code readability. Your final precondition should now look as follows:
-
+```javascript
 precondition
 {
     annotation { "Name" : "Slot path", "Filter" : EntityType.EDGE, "MaxNumberOfPicks" : 1 }
@@ -199,51 +179,36 @@ precondition
     annotation { "Name" : "Width" }
     isLength(definition.width, LENGTH_BOUNDS);
 }
-NOTE
+```
 
-FeatureScript is a whitespace insensitive language. This means that, as long as you aren't breaking up individual words or strings, you can insert or remove spaces and newlines anywhere without affecting the meaning.
-At this point, your Feature Studio should be free of errors. You can determine this by looking at the FeatureScript notices indicator on the right side of the top navbar. If there are no errors, this icon will be gray. If there are only warnings, it will be yellow. If there are errors, it will be red:
+### Create an instance of your feature
 
-No errors  Warnings  Errors
-FeatureScript notices indicator
-Create an instance of your feature
-To commit the changes you've made to your Feature Studio, press the "Commit" button in the FeatureScript toolbar:
+#### 1
+To commit the changes you've made to your Feature Studio, press the "Commit" button in the FeatureScript toolbar.
 
-Commit button
-
-NOTE
-
-The FeatureScript you write is always being saved in the cloud, just like other Onshape tabs. However, because code is usually not sensible as it's being typed, FeatureScript changes are not immediately visible to other tabs. For this, you will need to commit your changes.
-You can think of "commit" as "Update the whole document with these changes". Once changes to a Feature Studio are committed, Part Studios which depend on that Feature Studio will regenerate when you switch to them. If this causes run-time errors, those errors will appear in the FeatureScript notices flyout at this point.
-
-If you have changed a Feature Studio but not committed, you will see an asterisk before the element name on the Feature Studio tab, indicating the presence of uncommited changes:
-
-Commit status indicator
-
-If you close a browser tab with uncommitted changes, nothing is lost. You'll still see these uncommitted changes in the Feature Studio when you return.
-
-Switch to Part Studio 1. In this Part Studio, make some geometry that the slot feature can be tested on. Create a sketch with internal, perpendicular edges, like the one below, and extrude it:
+#### 2
+Switch to *Part Studio 1*. In this Part Studio, make some geometry that the slot feature can be tested on. Create a sketch with internal, perpendicular edges, like the one below, and extrude it:
 
 Part Studio sketch
 
+#### 3
 You should see a new icon in the toolbar for your new custom "Slot" feature. This dropdown menu will show all the custom feature types defined in this workspace.
 
 FeatureScript menu
 
 The name "Slot" seen here comes from the "Feature Type Name" you defined in the Feature Studio earlier. The icon for the feature is created automatically with the first two letter of that name.
 
+#### 4
 Click the Slot feature button. This will pull up a feature dialog for your feature. If your precondition is written correctly, this feature dialog should look like this:
 
 Slot feature dialog
 
+#### 5
 As input to your feature, choose an internal edge for the slot, choose the extruded part as the part to cut, and set the width to "3mm".
 
 Completed feature dialog
 
-NOTE
-
-When selecting the slot path, only edges are selectable. When selecting the part to cut, only solid bodies are selectable. This is the effect of setting the "Filter" field on the two query parameters.
-Define the Feature's behavior
+### Define the Feature's behavior
 The feature you created currently has no effect because the body of the feature function is empty. A feature function body is a block of code which will execute for each feature of this type, every time a Part Studio is regenerated.
 
 In this section, we will define following operations in the function body to create the slot:
