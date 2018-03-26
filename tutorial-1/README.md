@@ -2,8 +2,8 @@
 
 In this series of tutorials, we will create a slot feature, designed for joining two laser-cut parts. Eventually, we will use this feature to make large assemblies of laser-cuttable parts which are joined with slot features.
 
-![Slot Feature Onshape](https://github.com/morganb21/featurescript-tutorials/raw/master/images/slot-feature-onshape.png)
-![Laser Cut Elk](https://github.com/morganb21/featurescript-tutorials/raw/master/images/laser-cut-elk.png)
+![Slot Feature Onshape](../images/slot-feature-onshape.png)
+![Laser Cut Elk](../images/laser-cut-elk.png)
 
 The slot feature is just one example of what FeatureScript can do, but each tutorial in the series introduces concepts which can be applied to a wide variety of features.
 
@@ -48,7 +48,7 @@ This guide will take you step by step through the actions shown in the video abo
 
 Start by creating a new Feature Studio tab in a new Onshape document:
 
-![New Feature Studio](https://github.com/morganb21/featurescript-tutorials/raw/master/images/new-feature-studio.png)
+![New Feature Studio](../images/new-feature-studio.png)
 
 A Feature Studio is a place for editing FeatureScript where you can define functions to be used as __feature types__. All of Onshape's native feature types, from extrude to helix, are also written as FeatureScript feature types in the [Onshape Standard Library](https://cad.onshape.com/documents/12312312345abcabcabcdeff). Custom feature types that you write here will be treated like Onshape feature types in the Part Studio.
 
@@ -234,13 +234,13 @@ To commit the changes you've made to your Feature Studio, press the "Commit" but
 
 Switch to *Part Studio 1*. In this Part Studio, make some geometry that the slot feature can be tested on. Create a sketch with internal, perpendicular edges, like the one below, and extrude it:
 
-![Part Studio Sketch](https://github.com/morganb21/featurescript-tutorials/raw/master/part-studio-sketch.png)
+![Part Studio Sketch](../images/part-studio-sketch.png)
 
 #### 3
 
 You should see a new icon in the toolbar for your new custom "Slot" feature. This dropdown menu will show all the custom feature types defined in this workspace.
 
-![FeatureScript Menu](https://github.com/morganb21/featurescript-tutorials/raw/master/featurescript-meenu.png)
+![FeatureScript Menu](../images/featurescript-meenu.png)
 
 The name "Slot" seen here comes from the "Feature Type Name" you defined in the Feature Studio earlier. The icon for the feature is created automatically with the first two letter of that name.
 
@@ -248,13 +248,13 @@ The name "Slot" seen here comes from the "Feature Type Name" you defined in the 
 
 Click the Slot feature button. This will pull up a feature dialog for your feature. If your precondition is written correctly, this feature dialog should look like this:
 
-![Slot Feature Onshape](https://github.com/morganb21/featurescript-tutorials/raw/master/slot-feature-dialog.png)
+![Slot Feature Onshape](../images/slot-feature-dialog.png)
 
 #### 5
 
 As input to your feature, choose an internal edge for the slot, choose the extruded part as the part to cut, and set the width to "3mm".
 
-![Completed Feature Dialog](https://github.com/morganb21/featurescript-tutorials/raw/master/completed-feature-dialog.png)
+![Completed Feature Dialog](../images/completed-feature-dialog.png)
 
 ### Define the Feature's behavior
 
@@ -284,7 +284,7 @@ The first operation will extrude the sketch edge.
 
 In the feature's body, type "`opExtrude`", and select the autocompletion for the `opExtrude` function.
 
-![Extrude Autocomplete Menu](https://github.com/morganb21/featurescript-tutorials/raw/master/extrude-autocomplete-menu.png)
+![Extrude Autocomplete Menu](../images/extrude-autocomplete-menu.png)
 
 This will insert the following code:
 
@@ -393,7 +393,7 @@ Press the commit button. At this point, your FeatureScript notices panel should 
 
 If you switch back to the Part Studio, you should see a surface extruded from the edge in your slot feature in two directions:
 
-![Second Direction Extrude](https://github.com/morganb21/featurescript-tutorials/raw/master/second-direction-extrude.png)
+![Second Direction Extrude](../images/second-direction-extrude.png)
 
 #### 3
 
@@ -433,7 +433,7 @@ opThicken(context, id + "thicken1", {
 
 Press the commit button. In your Part Studio, you should see the thickened surface: a new solid body in your `Context`.
 
-![Thickened Parts List](https://github.com/morganb21/featurescript-tutorials/raw/master/thickened-parts-list.png) ![Thickened Surface](https://github.com/morganb21/featurescript-tutorials/raw/master/thickened-surface.png)
+![Thickened Parts List](../images/thickened-parts-list.png) ![Thickened Surface](../images/thickened-surface.png)
 
 The `opThicken` operation did not delete the original extruded surface, so let's clean that up now. Type and select the autocompletion for `opDeleteBodies`. This will insert:
 
@@ -453,7 +453,7 @@ opDeleteBodies(context, id + "deleteBodies1", {
 
 In your Part Studio, you should see the extruded surface disappear, but the new thickened body should still be present:
 
-![Deleted Parts List](https://github.com/morganb21/featurescript-tutorials/raw/master/deleted-parts-list.png) ![Deleted Surface](https://github.com/morganb21/featurescript-tutorials/raw/master/deleted-surface.png)
+![Deleted Parts List](../images/deleted-parts-list.png) ![Deleted Surface](../images/deleted-surface.png)
 
 The final operation will subtract the thickened surface from the specified `"Part to cut"`. Type and select the autocompletion for `opBoolean`:
 
@@ -480,7 +480,7 @@ opBoolean(context, id + "boolean1", {
 
 In your Part Studio, you should now see the slot correctly cut out of your part, and the thickened body deleted:
 
-![Slot Subtraction](https://github.com/morganb21/featurescript-tutorials/raw/master/slot-subtraction.png)
+![Slot Subtraction](../images/slot-subtraction.png)
 
 Congratulations! You've just completed your first FeatureScript feature.
 
