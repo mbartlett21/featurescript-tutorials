@@ -10,6 +10,7 @@ In the first tutorial, we'll walk through how to:
  - Specify the feature's inputs
  - Define the feature's behavior
  - Use instances of the feature in a Part Studio
+ 
 ## Motivation
 A slot is simple to create with or without using FeatureScript. However, encapsulating the behavior in a custom feature provides some key advantages:
 
@@ -68,7 +69,7 @@ annotation { "Feature Type Name" : "Slot" }
 #### 4
 Select the text `myFeature` on the next line (with autocomplete regions, you can press `tab` to select the next field). This is the FeatureScript name of this feature function. The function name is used by any FeatureScript calls that create this feature, *including features created in the Part Studio*. Thus, changing this name after creating features will break all features created with the old name. This name cannot include whitespace or special characters.
 
-Change the FeatureScript function name to `"slot"`:
+Change the FeatureScript function name to "`slot`":
 ```javascript
 export const slot = defineFeature(function(context is Context, id is Id, definition is map)
 ```
