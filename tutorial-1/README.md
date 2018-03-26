@@ -2,6 +2,9 @@
 
 In this series of tutorials, we will create a slot feature, designed for joining two laser-cut parts. Eventually, we will use this feature to make large assemblies of laser-cuttable parts which are joined with slot features.
 
+![Slot Feature Onshape](https://github.com/morganb21/featurescript-tutorials/raw/master/images/slot-feature-onshape.png)
+![Laser Cut Elk](https://github.com/morganb21/featurescript-tutorials/raw/master/images/laser-cut-elk.png)
+
 The slot feature is just one example of what FeatureScript can do, but each tutorial in the series introduces concepts which can be applied to a wide variety of features.
 
 In the first tutorial, we'll walk through how to:
@@ -36,7 +39,7 @@ This guide will take you step by step through the actions shown in the video abo
 #### 1
 Start by creating a new Feature Studio tab in a new Onshape document:
 
-<!-- Insert Picture Here -->
+![New Feature Studio](https://github.com/morganb21/featurescript-tutorials/raw/master/images/new-feature-studio.png)
 
 A Feature Studio is a place for editing FeatureScript where you can define functions to be used as __feature types__. All of Onshape's native feature types, from extrude to helix, are also written as FeatureScript feature types in the [Onshape Standard Library](https://cad.onshape.com/documents/12312312345abcabcabcdeff). Custom feature types that you write here will be treated like Onshape feature types in the Part Studio.
 
