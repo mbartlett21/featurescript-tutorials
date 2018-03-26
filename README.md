@@ -1,4 +1,4 @@
 # FeatureScript Tutorials
 Tutorials for Onshape FeatureScript
 
-Create-a-slot-feature
+[Tutorial 1 (Slot feature)](tutorial-1/)
