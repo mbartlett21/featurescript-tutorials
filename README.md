@@ -1,9 +1,14 @@
 # FeatureScript Tutorials
+
 Tutorials for Onshape FeatureScript
 
-## Slot Feature Tutorials
-[Tutorial 1 (Slot feature)](tutorial-1/)
+## [Slot Feature Tutorials](slot-tutorials/)
 
-[Tutorial 2 (Slot feature with sketch geometry) WIP](tutorial-2/)
+[Tutorial 1 (Slot feature)](slot-tutorials/tutorial-1/)
+A tutorial on how to create a slot feature that takes a line as input and creates a slot.
 
-[Tutorial 3 (Multiple slots) WIP](tutorial-3/)
+[Tutorial 2 (Slot feature with sketch geometry)](slot-tutorials/tutorial-2/)
+A tutorial on how to add sketch geometry. It uses the previous feature as its base.
+
+[Tutorial 3 (Multiple slots) WIP](slot-tutorials/tutorial-3/)
+A tutorial on how make a feature to make multiple slots, all defined exactly the same.
