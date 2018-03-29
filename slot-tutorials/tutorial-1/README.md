@@ -240,7 +240,7 @@ Switch to *Part Studio 1*. In this Part Studio, make some geometry that the slot
 
 You should see a new icon in the toolbar for your new custom "Slot" feature. This dropdown menu will show all the custom feature types defined in this workspace.
 
-![FeatureScript Menu](../images/featurescript-meenu.png)
+![FeatureScript Menu](../images/featurescript-menu.png)
 
 The name "Slot" seen here comes from the "Feature Type Name" you defined in the Feature Studio earlier. The icon for the feature is created automatically with the first two letter of that name.
 
