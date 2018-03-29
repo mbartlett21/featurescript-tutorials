@@ -1,4 +1,4 @@
-# [Slot Feature Tutorials](/)
+# [Slot Feature Tutorials](./)
 
 [Tutorial 1 (Slot feature)](tutorial-1/)
 
