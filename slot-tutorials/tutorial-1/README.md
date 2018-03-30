@@ -34,10 +34,6 @@ When invalid inputs are entered, errors can be reported to help diagnose what's 
 
 Your features will have more knowledge about their purpose than generic Onshape features, so their specific edge cases can be handled better. This, in combination with error handling, can mean the end user is less likely to make mistakes.
 
-## Video overview
-
-This video shows the creation of the slot feature. It demonstrates what a FeatureScript workflow can look like, and creates the same "Slot" feature type that the tutorial will guide you through below.
-
 ## Step-by-step guide
 
 This guide will take you step by step through the actions shown in the video above, explaining what the FeatureScript does and why. Major FeatureScript concepts will be marked in __bold__ when they are explained.
@@ -71,6 +67,18 @@ export const myFeature = defineFeature(function(context is Context, id is Id, de
 ```
 
 For more information about the structure and pieces of a feature definition, see [Writing features](https://cad.onshape.com/FsDoc/feature-types.html).
+
+> __NOTE__
+> 
+> In the Feature Studio, the code inserted by the "New feature" button has several sections of text marked as autocomplete regions. If you look closely, you can identify these regions by a thin, gray box outline.
+> 
+> Autocomplete regions are temporary navigation aids designed to help you write features quickly, and generally indicate the regions of inserted text that you are likely to change. You can navigate your cursor through these regions using the following keyboard shortcuts:
+> 
+> - `tab` : Select next autocomplete region
+> - `shift + tab` : Select previous autocomplete region
+> - `escape` : Dismiss all autocomplete regions
+> 
+> Moving your cursor outside a region (with the mouse or arrow keys) will also dismiss all autocomplete regions.
 
 #### 3
 
@@ -129,12 +137,32 @@ All geometry in FeatureScript is passed into features as `Query`s, so we will de
 
 Start typing "`query`". The autocompletion menu will expand below your cursor as you type. One of the autocompletions you should be able to see is "Query parameter", a snippet of code which, when placed in a feature precondition, defines a query parameter.
 
+> __NOTE__
+> 
+> Typing in a Feature Studio will often bring up a context-sensitive autocomplete menu. This menu shows a list of one or more autocompletions which match what you're typing:
+> 
+> ![Autocomplete Menu](../images/autocomplete-menu.png)
+> 
+> The flyout on the right side shows a preview of the text you will autocomplete, along with a short description. Autocomplete will show FeatureScript functions (including features), types, enums, and snippets (i.e. short FeatureScript code templates).
+> 
+> When an autocompletion menu is open, you can use the following shortcuts to navigate the menu:
+> 
+> `up/down arrow keys` : Select next/previous item in menu
+> `enter` : Insert selected autocompletion
+> `escape` : Remove the autocompletion menu
+
 Use the arrow keys (if necessary) to select the "Query parameter" snippet, and press enter to insert the autocompletion. This will insert the following code:
 
 ```javascript
 annotation { "Name" : "My Query", "Filter" : EntityType.FACE, "MaxNumberOfPicks" : 1 }
 definition.myQuery is Query;
 ```
+
+> __NOTE__
+> 
+> The code above represents a feature __parameter__, which the user will pass into the feature, and FeatureScript code will use. The parameter is defined on the second line, which asserts that the field "`myQuery`" on the `definition` is a `Query` for geometry.
+> 
+> The first line is an annotation, associated with the line that defines the parameter. The information in this annotation indicates how Onshape should create an entry for this parameter in the feature dialog.
 
 After inserting the Query parameter autocompletion, you should see the text `"My Query"` highlighted. This is the user-visible name of the parameter. Query parameter names are visible in the feature dialog when the field is empty.
 
@@ -190,6 +218,27 @@ annotation { "Name" : "Part to cut", "Filter" : EntityType.BODY && BodyType.SOLI
 definition.partToCut is Query;
 ```
 
+> __NOTE__
+> 
+> The filter above specifies that a user can select any full part in the Part Studio to use for this parameter.
+> 
+> Any selectable piece of topology in Onshape (edges, vertices, parts, etc.) is known as an __entity__. Every entity has an `EntityType` and a `BodyType` which specify what kind of geometry it represents.
+> 
+> The EntityType `BODY` specifies a full, independent object in the Part Studio. A `BODY` is often a part, but it can also be things of lower dimension. The dimension of a body is distinguished by its `BodyType`:
+> 
+>  - `BodyType.SOLID`, as in the filter above, specifies an independent three-dimensional part (such as the result of extruding a sketch region)
+>  - `BodyType.SHEET` specifies an independent two-dimensional surface (such as the default planes, or the result of extruding a sketch edge)
+>  - `BodyType.WIRE` specifies an independent one-dimensional path (such as the result of a helix feature)
+>  - `BodyType.POINT` specifies a independent zero-dimensional point (such as the origin, or the result of opPoint)
+> 
+> Entities which are not `EntityType.BODY`, like a single face of a part, are always children of some other entity. The other `EntityType`s specify child entities of a certain dimension:
+> 
+>  - `EntityType.FACE` specifies a two-dimensional child
+>  - `EntityType.EDGE` specifies a one-dimensional child
+>  - `EntityType.VERTEX` specifies a zero-dimensional child
+> 
+> A child entity will have a `BodyType` which matches dimension of its owner body.
+
 #### 4
 
 The final feature parameter will define the width of the slot. Since this parameter is a one-dimensional distance, we will use a length parameter.
@@ -223,12 +272,25 @@ precondition
     isLength(definition.width, LENGTH_BOUNDS);
 }
 ```
+> __NOTE__
+> 
+> FeatureScript is a whitespace insensitive language. This means that, as long as you aren't breaking up individual words or strings, you can insert or remove spaces and newlines anywhere without affecting the meaning.
 
 ### Create an instance of your feature
 
 #### 1
 
 To commit the changes you've made to your Feature Studio, press the "Commit" button in the FeatureScript toolbar.
+
+> __NOTE__
+> 
+> The FeatureScript you write is always being saved in the cloud, just like other Onshape tabs. However, because code is usually not sensible as it's being typed, FeatureScript changes are not immediately visible to *other* tabs. For this, you will need to __commit__ your changes.
+> 
+> You can think of "commit" as "Update the whole document with these changes". Once changes to a Feature Studio are committed, Part Studios which depend on that Feature Studio will regenerate when you switch to them. If this causes run-time errors, those errors will appear in the FeatureScript notices flyout at this point.
+> 
+> If you have changed a Feature Studio but not committed, you will see an asterisk before the element name on the Feature Studio tab, indicating the presence of uncommited changes.
+> 
+> If you close a browser tab with uncommitted changes, nothing is lost. You'll still see these uncommitted changes in the Feature Studio when you return.
 
 #### 2
 
@@ -255,6 +317,10 @@ Click the Slot feature button. This will pull up a feature dialog for your featu
 As input to your feature, choose an internal edge for the slot, choose the extruded part as the part to cut, and set the width to "3mm".
 
 ![Completed Feature Dialog](../images/completed-feature-dialog.png)
+
+> __NOTE__
+> 
+> When selecting the slot path, only edges are selectable. When selecting the part to cut, only solid bodies are selectable. This is the effect of setting the `"Filter"` field on the two query parameters.
 
 ### Define the Feature's behavior
 
@@ -297,6 +363,12 @@ opExtrude(context, id + "extrude1", {
 });
 ```
 
+> __NOTE__
+> 
+> Functions in the standard library with the "`op`" prefix are operations. These functions all perform some change to the context which modifies its geometry.
+> 
+> Often, there will also be a feature function which calls the operation (in the case of extruding, the `extrude` feature calls the `opExtrude` function). The feature is wrapper which provides a nice Part Studio interface on top of that operation, sometimes with additional operations (for instance, the `extrude` feature includes additional parameters to optionally add an `opBoolean` and an `opDraft`). In FeatureScript, it's often a better idea to call the operation directly.
+
 After insertion, you should see the parameter "`context`" highlighted. This is the `Context`, a data structure which contains all geometry in the Part Studio. Almost always, your features will involve a single `Context` named "`context`", passed in from the Part Studio. Here, we pass it on to the `opExtrude` function so that `opExtrude` can create geometry in the Part Studio.
 
 The default autocompletion of "`context`" makes sense, so leave it.
@@ -323,6 +395,14 @@ opExtrude(context, id + "extrude1", {
 });
 ```
 
+> __NOTE__
+> 
+> An __`Id`__ is a hierarchical identifier for a specific operation or feature. When the Part Studio creates a slot feature, a unique `Id`, named "`id`", is passed in. Each slot feature created will have a different unique `id`.
+> 
+> The expression `id + "extrude1"` creates a sub-`id` of this feature's `id`. We use the sub-`id` to label this specific invocation of the `opExtrude` feature. Thus, each instance of a slot will contain an instance of an `opExtrude`, all labeled uniquely (`idForSlot1 + "extrude1"`, `idForSlot2 + "extrude1"`, etc.).
+> 
+> As we will see soon, any `Id` can be used in a later operation to specify the geometry created by the feature or operation with that `id`. This will include any geometry created by sub-`id`s.
+
 Select the text next to the `"entities"` field. This field defines what geometry should be extruded. We want to extrude the sketch edge passed in. This edge is stored on on the `definition` as `slotPath`, as we defined in the precondition.
 
 Change the `"entities"` field to `definition.slotPath`:
@@ -348,6 +428,12 @@ opExtrude(context, id + "extrude1", {
         "endDepth" : 1 * inch
 });
 ```
+
+> __NOTE__
+> 
+> Functions from the standard library with the "`ev`" prefix are __evaluations__. These functions all obtain data and/or measurements from the entities inside a context.
+> 
+> The result of an evaluation function is a value which can be used in subsequent calculations. For instance, `evOwnerSketchPlane` returns a value with type `Plane`. A `Plane` has the information define its position and orientation in 3D space, including a 3D unit `Vector` defining the plane's normal direction. Above, we use this normal field above as the `opExtrude` direction.
 
 Press tab to select the text next to the `"endBound"` field. This field specifies a `BoundingType`: one of `BLIND`, `SYMMETRIC`, `THROUGH_ALL`, etc.
 
@@ -420,6 +506,16 @@ opThicken(context, id + "thicken1", {
         "thickness2" : 0.1 * inch
 });
 ```
+
+> __NOTE__
+> 
+> A __Query__, like `qCreatedBy`, is a way to refer to topological entities (vertices, edges, faces, and bodies) in FeatureScript.
+> 
+> You can think of a query as an order form for entities, with one or more criteria that the specified entities must satisfy. The query itself does not contain the entities. Rather a query specifies a set of entities in a context (remember: the context contains all the geometry). When you pass a query into an operation function, that function uses the query *and* the context to perform the operation on the right entities.
+> 
+> Other examples of queries are the two query parameters you've defined: `slotPath` and `partToCut`. These queries are generated automatically when a user selects entities, and stored in the fields `definition.slotPath` and `definition.partToCut`. The generated queries refer to the selected entities in a robust way so that features can be resistant to upstream changes. For instance, if a user selects an edge on the cap face of an extrude, then later flips the direction of that extrude, they'll find the downstream feature now has the same edge selected on the opposite side of the extrude, as expected.
+> 
+> A query may evaluate to zero, one, or many entities. To see all the queries FeatureScript has available, refer to the [Query module](https://cad.onshape.com/FsDoc/library.html#module-query.fs).
 
 `"thickness1"` and `"thickness2"` specify how much to thicken on each side of the surface. Let's make the slot symmetric, and thicken each side by half the slot width:
 
