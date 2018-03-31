@@ -1,3 +1,5 @@
+[Back to Slot Tutorials](../)
+
 # Add sketch geometry
 
 In this tutorial, we will rewrite the body of the slot feature created in the [last tutorial](../tutorial-1/). The new version will involve a sketch which creates more complex geometry.
