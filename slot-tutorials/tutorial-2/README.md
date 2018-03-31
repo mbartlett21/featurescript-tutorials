@@ -22,7 +22,7 @@ On oversized material, these protrusions will compress slightly to allow the mat
 
 Without FeatureScript, making many slots with geometry like this requires a lot of repetitive work. With FeatureScript, we can build this additional geometry inside the slot feature so it can automatically be a part of any slot we create.
 
-Add parameters to the precondition
+### Add parameters to the precondition
 We'll start by adding two new parameters to our slot feature, asking the user:
 
 1. Do you want to add these bumps?
