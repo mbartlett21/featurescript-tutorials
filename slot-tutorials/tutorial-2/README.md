@@ -113,6 +113,10 @@ annotation { "Name" : "Bump height" }
 isLength(definition.bumpHeight, BUMP_HEIGHT_BOUNDS);
 ```
 
+> __NOTE__
+> 
+> The constants `SLOT_WIDTH_BOUNDS` and `BUMP_HEIGHT_BOUNDS` are defined as top-level symbols, which can be used inside this Feature Studio. The export keyword also makes these symbols visible to any module that imports them. It is necessary to export in this case so that the Part Studio referencing this feature has the information needed to create the dialog.
+
 ### Narrow the slot path filter
 While we're here, we can modify the filter for the slot path to be more specific to prevent unwanted input.
 
@@ -224,12 +228,22 @@ We'll store this `Query` as a variable named `endPoints`:
 var endPoints is Query = qVertexAdjacent(definition.slotPath, EntityType.VERTEX);
 ```
 
+> __NOTE__
+> 
+> A variable in FeatureScript can optionally be defined with a type constraint (like "`is Query`" above). This will cause a runtime error if that variable is ever set to a value which does not match that type constraint.
+> 
+> The type constraint is not required, but it can make intent clearer and help find errors sooner.
+
 To test that we've queried for the right thing, we can use the `debug` function. When passed a `Query`, `debug` will highlight all entities matching the `Query` in red.
 
 ```javascript
 debug(context, endPoints);
 ```
-![Sketch Coordinate System](../images/debug-endpoints.png)
+![Debug Endpoints](../images/debug-endpoints.png)
+
+> __NOTE__
+> 
+> The debug function will __ONLY__ highlight entities when you open the feature dialog of the feature being debugged.
 
 If you open the FeatureScript notices flyout, you should see a line telling you how many entities of each `EntityType` that query resolved to (in this case, two vertices).
 
@@ -258,6 +272,24 @@ var endPosition is Vector = evVertexPoint(context, {
 });
 ```
 
+> __NOTE__
+> 
+> FeatureScript has two completely separate ways of representing entities and geometry:
+> 
+> 1. Queries, like `endPoints` are objects which specify criteria for finding a particular entity or set of entities in the Part Studio. *These are just specifications*, and they contain no information about the geometric or topological properties of any entities. Depending on the context it is evaluated in, a `Query` may resolve to zero, one, or many entities.
+> 
+> 2. Geometric objects, like `endPosition`, contain data about geometric positions and orientations (including `Vectors`, `Planes`, `CoordSystems`, and more). *These are just data*, and are not contextually associated with any entities in the Part Studio.
+> 
+> This design gives Onshape Part Studios and features the robust tools needed to maintain fully parametric references.
+> 
+> To get geometric information from a query, use an evaluation function, found in the [evaluate module](https://cad.onshape.com/FsDoc/library.html#module-evaluate.fs).
+
+> __NOTE__
+> 
+> `qNthElement`, used above, is a function which returns a `Query` for one of the entities that another `Query` evaluates to.
+> 
+> In general, the ordering of the elements inside a `Query` is not predictable, so care should be taken to ensure that qNthElement is only used when any ordering of entities will work. In our case, the resulting slot is symmetric, so we are content to define it starting on either end of the line.
+
 A `Vector` just an array of numbers (in this case, with units) which behaves naturally under operators like `+` and `*`. Debugging one of the resulting `Vector`s will print its exact location, in meters, and highlight that point in the Part Studio:
 
 ```javascript
@@ -274,6 +306,10 @@ The X-axis can be calculated by normalizing a vector pointing from `startPositio
 ```javascript
 var xDirection is Vector = normalize(endPosition - startPosition);
 ```
+
+> __NOTE__
+> 
+> We could have also gotten the X direction from the `slotPath`, by calling `evLine` or `evEdgeTangentLine`. As a rule of thumb, it's better practice to calculate geometric data using information you already have than to call more evaluate functions. This prevents bugs that can occur in edge cases where two seemingly consistent evaluations disagree with each other.
 
 The Z-axis can be calculated by evaluating the sketch plane of the slot path, and taking its normal:
 
@@ -352,7 +388,13 @@ Feature error tooltip
 ### Diagnose a runtime error
 In the FeatureScript notices menu, you can see all errors and warnings displayed. In this case, the issue is a precondition failure:
 
-newSketch precondition error
+![Sketch Precondition Error](../images/sketch-precondition-error.png)
+
+> __NOTE__
+> 
+> Some errors, like parse errors and mistyped variable names, are detectable inside the Feature Studio without ever running the code. __Runtime errors__, like dynamic type mismatches or dividing by zero, are only found when your code is run inside a Part Studio.
+> 
+> Some runtime errors (like this one) occur every time a feature runs, but many will only occur in certain contexts with certain inputs. It's generally good practice to maintain a set of Part Studios in the same document that test common cases and edge cases for your feature as you develop. This increases the odds of finding errors and fixing them early.
 
 A precondition failure means that parameters to a function (in this case, the `newSketch` function) have failed to match that function's precondition.
 
@@ -360,7 +402,7 @@ You can see the line of the precondition that failed in parenthesis: `(value.ske
 
 Another way to get information about the input expected by a function is to hover your mouse over the function name. Documentation will pop up giving you detailed information about what that function does, and what parameters it expects.
 
-newSketch doc on hover
+![Sketch Doc On Hover](../images/sketch-doc-on-hover.png)
 
 In both the precondition failure message and the hover documentation, we can see that the field `sketchPlane` on the third map parameter is expected to be a `Query`. In the hover documentation, we can also see that if we want to sketch on a `Plane`, we can call `newSketchOnPlane` instead.
 
@@ -395,6 +437,10 @@ skRectangle(sketch1, "rectangle1", {
 });
 ```
 
+> __NOTE__
+> 
+> Every sketch operation has a sketch `id` (here, it's `"rectangle1"`). Unlike feature operation Ids, a sketch id is just a plain string. A sketch `id` needs to be unique within a sketch.
+
 The vectors positioning the corners of the rectangle are 2D length vectors, measured in the coordinate system of the sketch we provided (with the origin at one end of the slot, and the x-axis along the slot).
 
 This means we can easily calculate the precise coordinates needed for the rectangle using the slot width and length.
@@ -406,7 +452,9 @@ skRectangle(sketch1, "rectangle1", {
 });
 ```
 
-This will add a sketch rectangle precisely along your slot path. sketch rectangle
+This will add a sketch rectangle precisely along your slot path.
+
+![Sketch Rectangle](../images/sketch-rectangle.png)
 
 ### Sketch slot bumps
 We should add bumps to the sketch if (and only if) the user has specified they want bumps.
@@ -420,6 +468,10 @@ if (definition.addBumps)
 }
 ```
 
+> __NOTE__
+> 
+> In a FeatureScript `if` statement, the condition inside parenthesis must evaluate to a `boolean`. Otherwise, an error is thrown.
+
 Inside the `if` statement, we can create variables that will help us calculate the positions of arcs that will create the bumps we need.
 
 ```javascript
@@ -427,6 +479,10 @@ var bumpDistance   = slotLength / 10;          // Distance from end of slot to s
 var bumpWidth      = slotLength / 5;
 var bumpHeight     = definition.bumpHeight;
 ```
+
+> NOTE
+> 
+> Like other control structures in FeatureScript, an `if` statement usually uses a statement block, delimited inside curly braces `{}`. Variables declared inside a statement block can only be used inside that statement block.
 
 We want to create arcs on both sides of our slot. To write less code, we'll use a `for` loop.
 
@@ -436,6 +492,14 @@ for (var side in [-1, 1])
 
 }
 ```
+
+> __NOTE__
+> 
+> A FeatureScript `for` loop can be declared with the syntax above (to iterate through an `array` or `map`), or with the following, more traditional syntax:
+> 
+> ```javascript
+> for (var i = 0; i < count; i += 1)
+> ```
 
 Inside the `for` loop, we can define two arcs, one for each end of the slot, using `skArc`. The start, middle, and end points can be calculated from the variables defined above.
 
@@ -453,9 +517,19 @@ skArc(sketch1, "arc_1_" ~ side, {
 });
 ```
 
+> __NOTE__
+> 
+> In order to ensure unique sketch ids for both iterations of the `for` loop, the `skArc` ids were both concatenated with the iteration variable `side`.
+> 
+> The `~` operator will always perform `string` concatenation, converting the values on either side to a `string` representation if necessary.
+
+> __CHALLENGE__
+> 
+> The two calls to `skArc` above contain a lot of nearly redundant calculations. Try rewriting this code to use two nested `for` loops, and only a single call to `skArc`.
+
 With the arcs added, you should now see the full sketch in your Part Studio.
 
-Sketch with bumps
+![Sketch With Bumps](../images/sketch-with-bumps.png)
 
 The full code for creating the sketch is below:
 
@@ -503,7 +577,7 @@ var regionToExtrude = qContainsPoint(qSketchRegion(id + "sketch1"), cSys.origin)
 debug(context, regionToExtrude);
 ```
 
-Debugged sketch region
+![Debug sketch region](../images/debug-sketch-region.png)
 
 We can now extrude the sketch region using `opExtrude`, just like in the last tutorial.
 
@@ -516,7 +590,7 @@ opExtrude(context, id + "extrude1", {
 });
 ```
 
-Extrude the sketch region
+![Extrude Sketch Region](../images/extrude-sketch-region.png)
 
 An `opBoolean` will subtract the body:
 
@@ -528,7 +602,7 @@ opBoolean(context, id + "boolean1", {
 });
 ```
 
-Subtract the extruded region
+![Subtract Full Slot](../images/subtract-full-slot.png)
 
 Finally, to clean up, we can delete the sketch bodies used to create the slot.
 
@@ -538,11 +612,11 @@ opDeleteBodies(context, id + "delete1", {
 });
 ```
 
-Delete sketch bodies
+![Delete Sketch Bodies](../images/delete-sketch-bodies.png)
 
 We can use this new slot feature anywhere we used the old feature, and the user now has the option of adding bumps to the slot.
 
-Multiple slots with bumps
+![Multiple Slots With Bumps](../images/multiple-slots-with-bumps.png)
 
 ## Review
 In this tutorial, we've discussed how to:
@@ -664,7 +738,7 @@ export const slot = defineFeature(function(context is Context, id is Id, definit
         skSolve(sketch1);
 
         var regionToExtrude = qContainsPoint(qSketchRegion(id + "sketch1"), cSys.origin);
-        debug(context, regionToExtrude);
+        // debug(context, regionToExtrude);
 
         opExtrude(context, id + "extrude1", {
               "entities" : regionToExtrude,

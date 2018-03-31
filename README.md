@@ -2,6 +2,8 @@
 
 Tutorials for Onshape FeatureScript
 
+[Issues](https://github.com/morganb21/featurescript-tutorials/issues) and [Pull Requests](https://github.com/morganb21/featurescript-tutorials/pulls) welcome!
+
 ## [Slot Feature Tutorials](slot-tutorials/)
 
 [Tutorial 1 (Slot feature)](slot-tutorials/tutorial-1/)
@@ -12,6 +14,6 @@ A tutorial on how to create a slot feature that takes a line as input and create
 
 A tutorial on how to add sketch geometry. It uses the previous feature as its base.
 
-[Tutorial 3 (Multiple slots) WIP](slot-tutorials/tutorial-3/)
+~~[Tutorial 3 (Multiple slots)]~~ Work in Progress
 
-A tutorial on how make a feature to make multiple slots, all defined exactly the same.
+~~A tutorial on how make a feature to make multiple slots, all defined exactly the same.~~
