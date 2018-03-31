@@ -1,6 +1,8 @@
+[Back to Slot Tutorials](../)
+
 # Multiple Slots
 
-In this tutorial, we will make a new feature that runs the slot feature created in the tutorials [Create a slot Feature](../tutorial-1/) and [Adding sketch geometry](../tutorial-2/). This new feature will allow multiple selections for the slot path.
+In this tutorial, we will make a new feature that runs the slot feature created in the tutorials "[Create a slot Feature](../tutorial-1/)" and "[Adding sketch geometry](../tutorial-2/)". This new feature will allow multiple selections for the slot path.
 
 This tutorial will walk through how to:
 
