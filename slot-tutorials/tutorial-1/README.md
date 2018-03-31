@@ -653,7 +653,7 @@ export const slot = defineFeature(function(context is Context, id is Id, definit
 
 ## [Slot Tutorials](../)
 
-[Tutorial 1 (Create a Slot Feature)](./)
+__[Tutorial 1 (Create a Slot Feature)](./)__
 
 [Tutorial 2 (Add Sketch Geometry)](../tutorial-2/)
 
