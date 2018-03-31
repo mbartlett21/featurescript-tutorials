@@ -1,4 +1,5 @@
-[Back to Main Tutorial Page](../)
+[Back to Main Tutorial Page](../README.md)
+
 # [Slot Feature Tutorials](./)
 
 [Tutorial 1 (Slot feature)](tutorial-1/)
