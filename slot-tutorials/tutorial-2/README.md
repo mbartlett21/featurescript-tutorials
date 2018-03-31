@@ -760,3 +760,11 @@ export const slot = defineFeature(function(context is Context, id is Id, definit
         });
     });
 ```
+
+## [Slot Tutorials](../)
+
+[Tutorial 1 (Create a Slot Feature)](../tutorial-1/)
+
+__[Tutorial 2 (Add Sketch Geometry)](./)__
+
+[Tutorial 3 (Multiple Slot)](../tutorial-3/)
