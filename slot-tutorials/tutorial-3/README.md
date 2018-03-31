@@ -265,3 +265,11 @@ export const multipleSlot = defineFeature(function(context is Context, id is Id,
     });
 
 ```
+
+## [Slot Tutorials](../)
+
+[Tutorial 1 (Create a Slot Feature)](../tutorial-1/)
+
+[Tutorial 2 (Add Sketch Geometry)](../tutorial-2/)
+
+__[Tutorial 3 (Multiple Slots)](./)__
