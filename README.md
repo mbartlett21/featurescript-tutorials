@@ -14,6 +14,6 @@ A tutorial on how to create a slot feature that takes a line as input and create
 
 A tutorial on how to add sketch geometry. It uses the previous feature as its base.
 
-~~[Tutorial 3 (Multiple slots)]~~ Work in Progress
+[Tutorial 3 (Multiple slots)](slot-tutorials/tutorial-3/)
 
-~~A tutorial on how make a feature to make multiple slots, all defined exactly the same.~~
+A tutorial on how make a feature to make multiple slots, all defined exactly the same.
