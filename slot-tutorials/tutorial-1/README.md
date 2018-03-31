@@ -1,3 +1,5 @@
+[Back to Slot Tutorials](../)
+
 # Create a Slot Feature in FeatureScript
 
 In this series of tutorials, we will create a slot feature, designed for joining two laser-cut parts. Eventually, we will use this feature to make large assemblies of laser-cuttable parts which are joined with slot features.
@@ -648,3 +650,11 @@ export const slot = defineFeature(function(context is Context, id is Id, definit
 
     });
 ```
+
+## [Slot Tutorials](../)
+
+__[Tutorial 1 (Create a Slot Feature)](./)__
+
+[Tutorial 2 (Add Sketch Geometry)](../tutorial-2/)
+
+[Tutorial 3 (Multiple Slot)](../tutorial-3/)

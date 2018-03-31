@@ -1,3 +1,5 @@
+[Back to Slot Tutorials](../)
+
 # Add sketch geometry
 
 In this tutorial, we will rewrite the body of the slot feature created in the [last tutorial](../tutorial-1/). The new version will involve a sketch which creates more complex geometry.
@@ -758,3 +760,11 @@ export const slot = defineFeature(function(context is Context, id is Id, definit
         });
     });
 ```
+
+## [Slot Tutorials](../)
+
+[Tutorial 1 (Create a Slot Feature)](../tutorial-1/)
+
+__[Tutorial 2 (Add Sketch Geometry)](./)__
+
+[Tutorial 3 (Multiple Slot)](../tutorial-3/)
