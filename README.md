@@ -2,8 +2,6 @@
 
 Tutorials for Onshape FeatureScript
 
-[Issues](https://github.com/morganb21/featurescript-tutorials/issues) and [Pull Requests](https://github.com/morganb21/featurescript-tutorials/pulls) welcome!
-
 ## [Slot Feature Tutorials](slot-tutorials/)
 
 [Tutorial 1 (Slot feature)](slot-tutorials/tutorial-1/)
